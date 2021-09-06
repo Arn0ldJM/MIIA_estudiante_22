@@ -98,5 +98,64 @@ index_sup = tuple.index(tupla_primos, lim_superior)
 tupla_secuencia = tupla_primos[index_inf : index_sup+1 : 2]
 print(tupla_secuencia)
 
+#%%
+# Ejercicio 11
+pedidos_semana_1 = (3,2)
+pedidos_semana_2 = (2,4)
+pedidos_semana_3 = (1,1)
 
+tupla_pedidos = (pedidos_semana_1, pedidos_semana_2, pedidos_semana_3)
 
+#%%
+#Ejeccicio 12
+pedidos_semana_1 = (3,2)
+pedidos_semana_2 = (2,4)
+pedidos_semana_3 = (1,1)
+
+tupla_pedidos = (pedidos_semana_1, pedidos_semana_2, pedidos_semana_3)
+s = 2
+semana_x = tupla_pedidos[s-1]
+total_pedidos_semana_s = sum (semana_x)
+
+#%%
+# Ejecricio 13
+
+dicc_meses = {"Enero":31,
+              "Febrero":28,
+              "Marzo": 31,
+              "Abril": 30,
+              "Mayo":31,
+              "Julio":31,
+              "Agosto":31,
+              "Septiembre":30,
+              "Noviembre":30}
+
+dicc_meses ['Junio'] = 30
+dicc_meses ['Octubre'] = 31
+dicc_meses ['Diciembre'] = 31 
+
+print(dicc_meses)
+
+#%%
+# Ejercicio 14
+
+matriz = {}
+matriz[(1,2)]=1
+matriz[(1,4)]=1
+matriz[(1,5)]=1
+matriz[(2,5)]=1 
+matriz[(3,1)]=1
+matriz[(3,4)]=1
+matriz[(4,1)]=1
+matriz[(4,3)]=1
+matriz[(4,5)]=1
+
+print(matriz)
+
+# Ejercicio 15
+
+h = 5
+t = 2
+
+prediccion_familia = matriz[(t,h)]
+print(prediccion_familia)
