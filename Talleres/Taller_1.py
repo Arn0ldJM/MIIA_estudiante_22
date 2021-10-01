@@ -157,5 +157,9 @@ print(matriz)
 h = 5
 t = 2
 
-prediccion_familia = matriz[(t,h)]
+
+if (t,h) in matriz:
+    prediccion_familia = matriz[(t,h)]
+else:
+    prediccion_familia = 0
 print(prediccion_familia)
