@@ -17,7 +17,8 @@ from ipywidgets import interactive
 df = pd.read_csv('Archivos/BankChurners.csv')
 df.head()
 
-print(df["Marital_Status"].value_counts())
+conteo = df["Marital_Status"].value_counts()
 
-fig = go.Figure(data=[go.Pie(labels=[], values=[], pull=[0.2, 0, 0, 0])])
+
+fig = go.Figure(data=[go.Pie(labels=conteo.index, values=conteo.values, pull=[0.2, 0, 0, 0])])
 fig.show()
