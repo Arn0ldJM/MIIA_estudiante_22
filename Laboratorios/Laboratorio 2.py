@@ -15,6 +15,9 @@ import seaborn as sns
 import missingno as msno
 from sklearn.impute import KNNImputer
 import scipy.stats as estadísticas
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
 
 #%%
 
@@ -32,9 +35,8 @@ def exploracion_data (df):
 def valores_vacios(df):
     vacios_data = df.isnull().sum()
     mx = msno.matrix(df)
-    barras = msno.bar (df)
-    dendro = msno.dendrogram (df)
-    return vacios_data, mx, barras, dendro
+    dendrogram = msno.dendrogram(df)
+    return vacios_data, mx, dendrogram
 
 def visualizar_datos(df):
     print(data.head())
@@ -57,6 +59,13 @@ def factorize_variables(df):
         df[c], _ = pd.factorize(df[c])
     return df
 
+def dummies(df):
+    df_dummies = df.copy()
+    for i in df:
+        if df[i].dtypes == object:
+            df_dummies = pd.get_dummies(df_dumies["i"])
+                   
+    return df_dummies
 #%%
 #Mision 1
 
@@ -132,54 +141,71 @@ sns.set(rc={"figure.figsize":(15, 8)})
 ax = sns.boxplot(x="FAMI_ESTRATOVIVIENDA", y="PUNT_GLOBAL", data=data)
 data["FAMI_ESTRATOVIVIENDA"].value_counts()
 
-data["ESTU_TIENEETNIA"].value_counts()
 ax = sns.boxplot(x="ESTU_TIENEETNIA", y="PUNT_GLOBAL", data=data)
+data["ESTU_TIENEETNIA"].value_counts()
 
-data["ESTU_GENERO"].value_counts()
+
 ax = sns.boxplot(x="ESTU_GENERO", y="PUNT_GLOBAL", data=data)
+data["ESTU_GENERO"].value_counts()
 
-data["FAMI_TIENEINTERNET"].value_counts()
+
 ax = sns.boxplot(x="FAMI_TIENEINTERNET", y="PUNT_GLOBAL", data=data)
+data["FAMI_TIENEINTERNET"].value_counts()
 
-data["FAMI_TIENECOMPUTADOR"].value_counts()
+
 ax = sns.boxplot(x="FAMI_TIENECOMPUTADOR", y="PUNT_GLOBAL", data=data)
+data["FAMI_TIENECOMPUTADOR"].value_counts()
 
-data["FAMI_COMELECHEDERIVADOS"].value_counts()
+
 ax = sns.boxplot(x="FAMI_COMELECHEDERIVADOS", y="PUNT_GLOBAL", data=data)
+data["FAMI_COMELECHEDERIVADOS"].value_counts()
 
-data["FAMI_COMECARNEPESCADOHUEVO"].value_counts()
+
 ax = sns.boxplot(x="FAMI_COMECARNEPESCADOHUEVO", y="PUNT_GLOBAL", data=data)
+data["FAMI_COMECARNEPESCADOHUEVO"].value_counts()
 
-data["FAMI_COMECEREALFRUTOSLEGUMBRE"].value_counts()
+
 ax = sns.boxplot(x="FAMI_COMECEREALFRUTOSLEGUMBRE", y="PUNT_GLOBAL", data=data)
+data["FAMI_COMECEREALFRUTOSLEGUMBRE"].value_counts()
 
 #Función para factorizar las variables categoricas
 data_fat = factorize_variables(data)
 sns.heatmap(data_fat.corr(), square=True, annot=True)
 
 
-
-def corrdot(*args, **kwargs):
-    corr_r = args[0].corr(args[1], 'pearson')
-    corr_text = f"{corr_r:2.2f}".replace("0.", ".")
-    ax = plt.gca()
-    ax.set_axis_off()
-    marker_size = abs(corr_r) * 10000
-    ax.scatter([.5], [.5], marker_size, [corr_r], alpha=0.6, cmap="coolwarm",
-               vmin=-1, vmax=1, transform=ax.transAxes)
-    font_size = abs(corr_r) * 40 + 5
-    ax.annotate(corr_text, [.5, .5,],  xycoords="axes fraction",
-                ha='center', va='center', fontsize=font_size)
-
-sns.set(style='white', font_scale=1.6)
-data = sns.load_dataset(data)
-g = sns.PairGrid(data, aspect=1.4, diag_sharey=False)
-g.map_lower(sns.regplot, lowess=True, ci=False, line_kws={'color': 'black'})
-g.map_diag(sns.distplot, kde_kws={'color': 'black'})
-g.map_upper(corrdot)
-
-
-cor = data.corr()
+cor = data_fat.corr()
 sns.heatmap(cor, annot=True)
 cor_pt_global = cor['PUNT_GLOBAL']
 
+#%%
+      
+
+#Mision 3
+
+y = pd.Series(data['PUNT_GLOBAL'])
+X = data.iloc[:,0:14]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+lr = linear_model.LinearRegression()
+lr.fit(X_train, y_train)
+
+y_pred = lr.predict(X_test,)
+
+r2 = lr.score(X_test, y_test)
+r2
+
+#modelo2
+
+y = pd.Series(data_fat['PUNT_GLOBAL'])
+X = data_fat['FAMI_COMELECHEDERIVADOS','FAMI_COMECARNEPESCADOHUEVO','FAMI_COMECEREALFRUTOSLEGUMBRE','FAMI_ESTRATOVIVIENDA']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+lr = linear_model.LinearRegression()
+lr.fit(X_train, y_train)
+
+y_pred = lr.predict(X_test,)
+
+r2 = lr.score(X_test, y_test)
+r2
